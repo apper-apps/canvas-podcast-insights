@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import React, { useState } from "react";
-import * as XLSX from "xlsx";
+// CSV parsing functionality - no external dependency needed
 import ApperIcon from "@/components/ApperIcon";
 import Card from "@/components/atoms/Card";
 import Button from "@/components/atoms/Button";
@@ -103,14 +103,14 @@ const SettingsPage = () => {
     const file = event.target.files[0];
     if (!file) return;
 
-// Check if file is JSON or Excel
-    const isJson = file.type === 'application/json';
-    const isExcel = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || 
-                    file.type === 'application/vnd.ms-excel' || 
-                    file.name.endsWith('.xlsx');
+// Check if file is JSON or CSV
+    const isJson = file.type === 'application/json' || file.name.endsWith('.json');
+    const isCsv = file.type === 'text/csv' || 
+                  file.type === 'application/csv' || 
+                  file.name.endsWith('.csv');
     
-    if (!isJson && !isExcel) {
-      toast.error("Please select a valid JSON or Excel (.xlsx) file");
+    if (!isJson && !isCsv) {
+      toast.error("Please select a valid JSON or CSV file");
       return;
     }
 
@@ -123,30 +123,75 @@ let importData;
         const fileContent = await file.text();
         importData = JSON.parse(fileContent);
       } else {
-        // Handle Excel file
-        const arrayBuffer = await file.arrayBuffer();
-        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+        // Handle CSV file
+        const fileContent = await file.text();
         
-        // Check for required worksheets
-        if (!workbook.SheetNames.includes('Episodes') || !workbook.SheetNames.includes('Notes')) {
-          toast.error("Excel file must contain 'Episodes' and 'Notes' worksheets");
-          return;
-        }
+        // Simple CSV parser that handles quoted fields
+        const parseCSV = (csvText) => {
+          const lines = csvText.trim().split('\n');
+          if (lines.length < 2) return [];
+          
+          const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+          const rows = [];
+          
+          for (let i = 1; i < lines.length; i++) {
+            const line = lines[i];
+            const values = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let j = 0; j < line.length; j++) {
+              const char = line[j];
+              if (char === '"') {
+                inQuotes = !inQuotes;
+              } else if (char === ',' && !inQuotes) {
+                values.push(current.trim().replace(/^"|"$/g, ''));
+                current = '';
+              } else {
+                current += char;
+              }
+            }
+            values.push(current.trim().replace(/^"|"$/g, ''));
+            
+            if (values.length === headers.length) {
+              const row = {};
+              headers.forEach((header, index) => {
+                row[header] = values[index] || '';
+              });
+              rows.push(row);
+            }
+          }
+          
+          return rows;
+        };
         
-        // Parse Episodes worksheet
-        const episodesSheet = workbook.Sheets['Episodes'];
-        const episodes = XLSX.utils.sheet_to_json(episodesSheet);
+        // Parse CSV and determine if it contains episodes or notes based on headers
+        const csvData = parseCSV(fileContent);
         
-        // Parse Notes worksheet  
-        const notesSheet = workbook.Sheets['Notes'];
-        const notes = XLSX.utils.sheet_to_json(notesSheet);
+        // Check if CSV contains episode data (has title_c or episode-specific fields)
+        const hasEpisodeFields = csvData.length > 0 && (
+          csvData[0].hasOwnProperty('title_c') || 
+          csvData[0].hasOwnProperty('channel_name_c') ||
+          csvData[0].hasOwnProperty('youtube_url_c')
+        );
+        
+        // Check if CSV contains note data (has content_c or episode_id_c)
+        const hasNoteFields = csvData.length > 0 && (
+          csvData[0].hasOwnProperty('content_c') || 
+          csvData[0].hasOwnProperty('episode_id_c')
+        );
         
         importData = {
           version: "1.0.0",
           exportedAt: new Date().toISOString(),
-          episodes: episodes,
-          notes: notes
+          episodes: hasEpisodeFields ? csvData : [],
+          notes: hasNoteFields ? csvData : []
         };
+        
+        if (!hasEpisodeFields && !hasNoteFields) {
+          toast.error("CSV file must contain either episode fields (title_c, channel_name_c) or note fields (content_c, episode_id_c)");
+          return;
+        }
       }
 
 // Validate file structure
@@ -285,12 +330,12 @@ let importData;
       toast.success(`Successfully imported ${importedEpisodes} episodes and ${importedNotes} notes`);
       
     } catch (error) {
-      console.error("Import failed:", error);
+console.error("Import failed:", error);
       
       if (error instanceof SyntaxError) {
         toast.error("Invalid JSON file format. Please check your JSON structure.");
-      } else if (error.message?.includes('Excel') || error.message?.includes('xlsx')) {
-        toast.error("Invalid Excel file format. Ensure worksheets are named 'Episodes' and 'Notes'.");
+      } else if (error.message?.includes('CSV') || error.message?.includes('csv')) {
+        toast.error("Invalid CSV file format. Please ensure proper comma-separated values with headers.");
       } else if (error?.response?.data?.message) {
         toast.error(`Import failed: ${error.response.data.message}`);
       } else if (error.message?.includes('Network')) {
@@ -355,7 +400,7 @@ let importData;
               <input
                 id="import-file-input"
                 type="file"
-accept=".json,.xlsx"
+accept=".json,.csv"
                 onChange={handleFileUpload}
                 style={{ display: 'none' }}
               />
