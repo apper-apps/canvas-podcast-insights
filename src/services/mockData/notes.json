@@ -1,0 +1,51 @@
+[
+  {
+    "Id": 1,
+    "episodeId": 1,
+    "content": "Reid's point about blitzscaling being wrong for many companies is crucial. The key factors: large market opportunity, network effects, and first-scaler advantage. Without these, focusing on unit economics first is better.",
+    "createdAt": "2023-12-16T10:30:00Z",
+    "updatedAt": "2023-12-16T10:30:00Z"
+  },
+  {
+    "Id": 2,
+    "episodeId": 1,
+    "content": "Interesting perspective on AI augmentation vs replacement. Reid believes AI will handle routine, data-heavy tasks while humans focus on creativity, empathy, and complex problem-solving. This has implications for how we structure teams and roles in startups.",
+    "createdAt": "2023-12-16T11:15:00Z",
+    "updatedAt": "2023-12-16T11:15:00Z"
+  },
+  {
+    "Id": 3,
+    "episodeId": 2,
+    "content": "Roelof's insight on power law distributions in VC is fundamental: it's not about being right often, but about being spectacularly right occasionally. This changes how we should think about risk-taking in investments.",
+    "createdAt": "2023-12-11T09:45:00Z",
+    "updatedAt": "2023-12-11T09:45:00Z"
+  },
+  {
+    "Id": 4,
+    "episodeId": 3,
+    "content": "The $7T AI market opportunity breakdown is fascinating, but Mamoon's warning about most AI companies failing is sobering. Key challenges: high costs, data moats, talent shortage, and solution-looking-for-problem syndrome.",
+    "createdAt": "2023-12-06T14:20:00Z",
+    "updatedAt": "2023-12-06T14:20:00Z"
+  },
+  {
+    "Id": 5,
+    "episodeId": 4,
+    "content": "Sarah's Hierarchy of Engagement framework: 1) Growing Engaged Time, 2) Retaining Users, 3) Self-Reinforcing. Most products never reach level 3, which explains why they struggle with defensibility. Need to focus on creating value that users generate for other users.",
+    "createdAt": "2023-11-29T16:10:00Z",
+    "updatedAt": "2023-11-29T16:10:00Z"
+  },
+  {
+    "Id": 6,
+    "episodeId": 5,
+    "content": "Dylan's approach to building in public at Figma created differentiation from Adobe and built community. The tradeoff: lose surprise but gain trust and accountability. Particularly powerful for early-stage companies.",
+    "createdAt": "2023-11-21T13:25:00Z",
+    "updatedAt": "2023-11-21T13:25:00Z"
+  },
+  {
+    "Id": 7,
+    "episodeId": 5,
+    "content": "The shift in enterprise software purchasing from top-down (IT/executives) to bottom-up (end users) is driving the importance of design. Well-designed tools reduce training costs, increase productivity, and improve employee satisfaction - measurable business value.",
+    "createdAt": "2023-11-21T14:05:00Z",
+    "updatedAt": "2023-11-21T14:05:00Z"
+  }
+]
