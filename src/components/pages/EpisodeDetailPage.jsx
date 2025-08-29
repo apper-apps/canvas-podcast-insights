@@ -282,9 +282,9 @@ setNotes(notesData.filter(note => note.episode_id_c?.Id === parseInt(id) || note
               </div>
 
               <div>
-                <span className="font-medium text-slate-700">Word Count:</span>
+<span className="font-medium text-slate-700">Word Count:</span>
                 <span className="ml-2 text-slate-600">
-                  ~{Math.round(episode.transcript.split(" ").length).toLocaleString()} words
+                  {episode.transcript_c ? `~${Math.round(episode.transcript_c.split(" ").length).toLocaleString()} words` : "No transcript"}
                 </span>
               </div>
 
