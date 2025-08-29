@@ -1,20 +1,20 @@
-import { createContext, useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { createContext, useEffect, useState } from "react";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
-import { setUser, clearUser } from '@/store/userSlice';
-import Layout from "@/components/organisms/Layout";
+import { clearUser, setUser } from "@/store/userSlice";
+import NotesPage from "@/components/pages/NotesPage";
+import PromptPassword from "@/components/pages/PromptPassword";
+import Login from "@/components/pages/Login";
+import SearchPage from "@/components/pages/SearchPage";
+import ResetPassword from "@/components/pages/ResetPassword";
+import Callback from "@/components/pages/Callback";
+import ErrorPage from "@/components/pages/ErrorPage";
+import Signup from "@/components/pages/Signup";
 import EpisodesPage from "@/components/pages/EpisodesPage";
 import EpisodeDetailPage from "@/components/pages/EpisodeDetailPage";
-import SearchPage from "@/components/pages/SearchPage";
-import NotesPage from "@/components/pages/NotesPage";
 import SettingsPage from "@/components/pages/SettingsPage";
-import Login from '@/components/pages/Login';
-import Signup from '@/components/pages/Signup';
-import Callback from '@/components/pages/Callback';
-import ErrorPage from '@/components/pages/ErrorPage';
-import ResetPassword from '@/components/pages/ResetPassword';
-import PromptPassword from '@/components/pages/PromptPassword';
+import Layout from "@/components/organisms/Layout";
 
 // Create auth context
 export const AuthContext = createContext(null);
@@ -27,11 +27,9 @@ function AppContent() {
   // Get authentication status with proper error handling
   const userState = useSelector((state) => state.user);
   const isAuthenticated = userState?.isAuthenticated || false;
-  
-  // Initialize ApperUI once when the app loads
+// Initialize ApperUI once when the app loads
   useEffect(() => {
     const { ApperClient, ApperUI } = window.ApperSDK;
-    
     const client = new ApperClient({
       apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
       apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
