@@ -63,9 +63,11 @@ const EpisodeTable = ({
   });
 
   const highlightText = (text, query) => {
-    if (!query || !text) return text;
+if (!query || !text) return text;
     
-    const regex = new RegExp(`(${query})`, "gi");
+    // Escape special regex characters and limit query length for security
+    const escapedQuery = query.slice(0, 100).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escapedQuery})`, "gi");
     const parts = text.split(regex);
     
     return parts.map((part, index) =>

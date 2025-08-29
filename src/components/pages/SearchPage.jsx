@@ -58,7 +58,7 @@ const SearchPage = () => {
       // Search in title (higher weight)
       if (episode.title.toLowerCase().includes(query)) {
         relevanceScore += 10;
-        const sentences = episode.title.match(/[^\.!?]+[\.!?]+/g) || [episode.title];
+const sentences = episode.title.match(/[^.!?]+[.!?]+/g) || [episode.title];
         matches.push(...sentences.filter(s => s.toLowerCase().includes(query)));
       }
 
@@ -77,14 +77,14 @@ const SearchPage = () => {
       // Search in description (medium weight)
       if (episode.description.toLowerCase().includes(query)) {
         relevanceScore += 5;
-        const sentences = episode.description.match(/[^\.!?]+[\.!?]+/g) || [episode.description];
+const sentences = episode.description.match(/[^.!?]+[.!?]+/g) || [episode.description];
         matches.push(...sentences.filter(s => s.toLowerCase().includes(query)).slice(0, 2));
       }
 
       // Search in transcript (lower weight but more matches)
       if (episode.transcript.toLowerCase().includes(query)) {
         relevanceScore += 2;
-        const sentences = episode.transcript.match(/[^\.!?]+[\.!?]+/g) || [];
+const sentences = episode.transcript.match(/[^.!?]+[.!?]+/g) || [];
         const transcriptMatches = sentences
           .filter(s => s.toLowerCase().includes(query))
           .slice(0, 5)
