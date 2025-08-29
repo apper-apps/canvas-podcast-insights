@@ -111,25 +111,26 @@ if (!query || !text) return text;
             <tr>
 <SortHeader field="title_c">Title</SortHeader>
               <SortHeader field="guest_name_c">Guest</SortHeader>
-<SortHeader field="channel_name_c">Channel</SortHeader>
+              <SortHeader field="channel_name_c">Channel</SortHeader>
               <SortHeader field="publishdate_c">Date</SortHeader>
               <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                 Duration
               </th>
+              <SortHeader field="view_c">Views</SortHeader>
               <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
-</thead>
+          </thead>
           <tbody className="bg-white divide-y divide-slate-200">
             {sortedEpisodes.map((episode) => (
-              <tr 
+<tr 
                 key={episode.Id} 
                 className="hover:bg-slate-50 cursor-pointer transition-colors"
                 onClick={() => navigate(`/episodes/${episode.Id}`)}
               >
                 <td className="px-6 py-4">
-<div className="max-w-md">
+                  <div className="max-w-md">
                     <div className="text-sm font-medium text-slate-900 line-clamp-2">
                       {highlightText(episode.title_c, searchQuery)}
                     </div>
@@ -139,11 +140,11 @@ if (!query || !text) return text;
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-<div className="text-sm text-slate-900">
+                  <div className="text-sm text-slate-900">
                     {highlightText(episode.guest_name_c, searchQuery)}
                   </div>
                 </td>
-<td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-slate-900">
                     {highlightText(episode.channel_name_c, searchQuery)}
                   </div>
@@ -153,13 +154,13 @@ if (!query || !text) return text;
                     {format(new Date(episode.publishdate_c), "MMM dd, yyyy")}
                   </div>
                 </td>
-<td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-slate-900">
                     {episode.duration_c || "-"}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-<div className="text-sm text-slate-900">
+                  <div className="text-sm text-slate-900">
                     {episode.view_c ? episode.view_c.toLocaleString() : "-"}
                   </div>
                 </td>

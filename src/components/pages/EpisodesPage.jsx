@@ -24,16 +24,23 @@ useEffect(() => {
     initializeData();
   }, []);
 
-  const initializeData = async () => {
-    await EpisodesService.initializeSampleData();
-    loadEpisodes();
+const initializeData = async () => {
+    try {
+      await EpisodesService.initializeSampleData();
+      await loadEpisodes();
+      toast.success("Data initialization completed");
+    } catch (error) {
+      console.error("Error initializing data:", error);
+      toast.error("Failed to initialize data");
+    }
   };
 
   const loadEpisodes = async () => {
     try {
       setError(null);
       setLoading(true);
-      const data = await EpisodesService.getAll();
+const data = await EpisodesService.getAll();
+      console.log(`Loaded ${data.length} valid episodes`);
       setEpisodes(data);
     } catch (err) {
       setError("Failed to load episodes. Please try again.");

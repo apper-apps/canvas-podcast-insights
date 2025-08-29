@@ -104,8 +104,27 @@ fieldName: "publishdate_c",
         ]
       };
 
-      const response = await client.fetchRecords("episode_c", params);
+// Add comprehensive fields array to ensure all data is retrieved
+      params.fields = [
+        { field: { Name: "Name" } },
+        { field: { Name: "Tags" } },
+        { field: { Name: "title_c" } },
+        { field: { Name: "channel_name_c" } },
+        { field: { Name: "channelid_c" } },
+        { field: { Name: "videoid_c" } },
+        { field: { Name: "company_c" } },
+        { field: { Name: "publishdate_c" } },
+        { field: { Name: "youtube_url_c" } },
+        { field: { Name: "duration_c" } },
+        { field: { Name: "description_c" } },
+        { field: { Name: "transcript_c" } },
+        { field: { Name: "guest_name_c" } },
+        { field: { Name: "likes_c" } },
+        { field: { Name: "view_c" } },
+        { field: { Name: "thumbnail_c" } }
+      ];
 
+      const response = await client.fetchRecords("episode_c", params);
       if (!response.success) {
         console.error(response.message);
         toast.error(response.message);
@@ -194,8 +213,8 @@ static async create(episodeData) {
       
       // Only include Updateable fields for each record
 const params = {
-        records: recordsArray.map(data => {
-const record = {
+records: recordsArray.map(data => {
+          const record = {
             Name: data.Name || data.title_c || data.title || data.Title || "",
             Tags: data.Tags || "",
             title_c: data.title_c || data.title || data.Title || "",
@@ -210,7 +229,7 @@ const record = {
             guest_name_c: data.guest_name_c || data.guest_name || data.guest || data.Guest || "",
             likes_c: parseInt(data.likes_c || data.likes || data.Likes || 0) || 0,
             view_c: parseInt(data.view_c || data.view || data.View || data.views || data.Views || 0) || 0,
-thumbnail_c: data.thumbnail_c || data.thumbnail || data.Thumbnail || ""
+            thumbnail_c: data.thumbnail_c || data.thumbnail || data.Thumbnail || ""
           };
           
           // Only include youtube_url_c if it's a valid URL with proper null checks
@@ -398,12 +417,42 @@ Name: updateData.Name,
     }
   }
 // Initialize with sample data if no episodes exist
-  static async initializeSampleData() {
+static async initializeSampleData() {
     try {
-      const existingData = await this.getAll();
+      // Get all records from database first
+      const { ApperClient } = window.ApperSDK;
+      const client = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      });
+
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "title_c" } },
+          { field: { Name: "guest_name_c" } },
+          { field: { Name: "channel_name_c" } }
+        ],
+        pagingInfo: { limit: 1000, offset: 0 }
+      };
+
+      const response = await client.fetchRecords("episode_c", params);
+      let existingData = response.success ? response.data || [] : [];
       
-      // Only add sample data if table is empty
-      if (!existingData || existingData.length === 0) {
+      // Filter out valid complete records (records that have essential fields)
+      const validRecords = existingData.filter(record => 
+        record.title_c && 
+        record.guest_name_c && 
+        record.channel_name_c &&
+        record.title_c.trim() !== "" &&
+        record.guest_name_c.trim() !== "" &&
+        record.channel_name_c.trim() !== ""
+      );
+      
+      console.log(`Found ${existingData.length} total records, ${validRecords.length} valid records`);
+      
+      // Only add sample data if there are no valid complete records
+      if (validRecords.length === 0) {
         console.log("Initializing episodes table with sample data...");
         
         const sampleRecords = SAMPLE_EPISODES.map(episode => ({
@@ -425,16 +474,18 @@ Name: updateData.Name,
           thumbnail_c: episode.thumbnail_c
         }));
 
-        const response = await this.apperClient.createRecord(this.tableName, {
+        const createResponse = await client.createRecord("episode_c", {
           records: sampleRecords
         });
 
-        if (response.success) {
+        if (createResponse.success) {
           console.log(`Successfully initialized ${sampleRecords.length} sample episodes`);
-          return response;
+          return createResponse;
         } else {
-          console.error("Failed to initialize sample data:", response.message);
+          console.error("Failed to initialize sample data:", createResponse.message);
         }
+      } else {
+        console.log(`Skipping sample data initialization - found ${validRecords.length} valid episodes`);
       }
     } catch (error) {
       console.error("Error initializing sample data:", error);
