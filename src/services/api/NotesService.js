@@ -138,10 +138,10 @@ class NotesService {
       
       // Only include Updateable fields
       const params = {
-        records: [{
+records: [{
           Name: noteData.Name || "",
           Tags: noteData.Tags || "",
-          episode_id_c: noteData.episode_id_c ? noteData.episode_id_c.toString() : "",
+          episode_id_c: noteData.episode_id_c ? parseInt(noteData.episode_id_c, 10) : null,
           content_c: noteData.content_c || "",
           created_at_c: noteData.created_at_c || new Date().toISOString(),
           updated_at_c: noteData.updated_at_c || new Date().toISOString()

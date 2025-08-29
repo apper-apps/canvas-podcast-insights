@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import React, { useState } from "react";
-import * as XLSX from 'xlsx';
+import * as XLSX from "xlsx";
 import ApperIcon from "@/components/ApperIcon";
 import Card from "@/components/atoms/Card";
 import Button from "@/components/atoms/Button";
@@ -166,60 +166,139 @@ let importData;
       let importedNotes = 0;
 
       // Import episodes
+// Import episodes
       if (importData.episodes.length > 0) {
-        const episodeRecords = importData.episodes.map(episode => ({
-          Name: episode.Name,
-          Tags: episode.Tags,
-          title_c: episode.title_c,
-          channel_name_c: episode.channel_name_c,
-          company_c: episode.company_c,
-          date_c: episode.date_c,
-          youtube_url_c: episode.youtube_url_c,
-          duration_c: episode.duration_c,
-          description_c: episode.description_c,
-          transcript_c: episode.transcript_c,
-          guest_name_c: episode.guest_name_c
-        }));
+        const episodeRecords = importData.episodes.map(episode => {
+          // Validate and format episode data
+          const record = {
+            Name: episode.Name || episode.title_c || "",
+            Tags: episode.Tags || "",
+            title_c: episode.title_c || "",
+            channel_name_c: episode.channel_name_c || "",
+            company_c: episode.company_c || "",
+            date_c: episode.date_c ? (typeof episode.date_c === 'string' ? episode.date_c : new Date(episode.date_c).toISOString().split('T')[0]) : new Date().toISOString().split('T')[0],
+            youtube_url_c: episode.youtube_url_c || "",
+            duration_c: episode.duration_c || "",
+            description_c: episode.description_c || "",
+            transcript_c: episode.transcript_c || "",
+            guest_name_c: episode.guest_name_c || ""
+          };
+          
+          // Remove empty string values to avoid validation issues
+          Object.keys(record).forEach(key => {
+            if (record[key] === "" && key !== "Name") {
+              delete record[key];
+            }
+          });
+          
+          return record;
+        });
 
         const episodesResponse = await apperClient.createRecord('episode_c', {
           records: episodeRecords
         });
 
-        if (episodesResponse.success && episodesResponse.results) {
-          importedEpisodes = episodesResponse.results.filter(r => r.success).length;
+        if (!episodesResponse.success) {
+          console.error(`Failed to import episodes: ${episodesResponse.message}`);
+          toast.error(`Episode import failed: ${episodesResponse.message}`);
+        } else if (episodesResponse.results) {
+          const successfulEpisodes = episodesResponse.results.filter(r => r.success);
+          const failedEpisodes = episodesResponse.results.filter(r => !r.success);
+          
+          importedEpisodes = successfulEpisodes.length;
+          
+          if (failedEpisodes.length > 0) {
+            console.error(`Failed to import ${failedEpisodes.length} episodes:${JSON.stringify(failedEpisodes)}`);
+            failedEpisodes.forEach((record, index) => {
+              if (record.message) {
+                toast.error(`Episode ${index + 1}: ${record.message}`);
+              }
+              if (record.errors) {
+                record.errors.forEach(error => {
+                  toast.error(`Episode ${index + 1} - ${error.fieldLabel}: ${error.message}`);
+                });
+              }
+            });
+          }
         }
-      }
 
-      // Import notes
+// Import notes
       if (importData.notes.length > 0) {
-        const noteRecords = importData.notes.map(note => ({
-          Name: note.Name,
-          Tags: note.Tags,
-          episode_id_c: note.episode_id_c?.Id || note.episode_id_c,
-          content_c: note.content_c,
-          created_at_c: note.created_at_c,
-          updated_at_c: note.updated_at_c
-        }));
+        const noteRecords = importData.notes.map(note => {
+          // Validate and format note data
+          const record = {
+            Name: note.Name || "",
+            Tags: note.Tags || "",
+            content_c: note.content_c || "",
+            created_at_c: note.created_at_c ? (typeof note.created_at_c === 'string' ? note.created_at_c : new Date(note.created_at_c).toISOString()) : new Date().toISOString(),
+            updated_at_c: note.updated_at_c ? (typeof note.updated_at_c === 'string' ? note.updated_at_c : new Date(note.updated_at_c).toISOString()) : new Date().toISOString()
+          };
+          
+          // Handle lookup field - convert to integer
+          if (note.episode_id_c) {
+            const episodeId = note.episode_id_c?.Id || note.episode_id_c;
+            if (episodeId && !isNaN(episodeId)) {
+              record.episode_id_c = parseInt(episodeId, 10);
+            }
+          }
+          
+          // Remove empty string values to avoid validation issues
+          Object.keys(record).forEach(key => {
+            if (record[key] === "" && key !== "Name") {
+              delete record[key];
+            }
+          });
+          
+          return record;
+        });
 
         const notesResponse = await apperClient.createRecord('note_c', {
           records: noteRecords
         });
 
-        if (notesResponse.success && notesResponse.results) {
-          importedNotes = notesResponse.results.filter(r => r.success).length;
+        if (!notesResponse.success) {
+          console.error(`Failed to import notes: ${notesResponse.message}`);
+          toast.error(`Notes import failed: ${notesResponse.message}`);
+        } else if (notesResponse.results) {
+          const successfulNotes = notesResponse.results.filter(r => r.success);
+          const failedNotes = notesResponse.results.filter(r => !r.success);
+          
+          importedNotes = successfulNotes.length;
+          
+          if (failedNotes.length > 0) {
+            console.error(`Failed to import ${failedNotes.length} notes:${JSON.stringify(failedNotes)}`);
+            failedNotes.forEach((record, index) => {
+              if (record.message) {
+                toast.error(`Note ${index + 1}: ${record.message}`);
+              }
+              if (record.errors) {
+                record.errors.forEach(error => {
+                  toast.error(`Note ${index + 1} - ${error.fieldLabel}: ${error.message}`);
+                });
+              }
+            });
+          }
         }
       }
+}
 
       toast.success(`Successfully imported ${importedEpisodes} episodes and ${importedNotes} notes`);
       
     } catch (error) {
       console.error("Import failed:", error);
-if (error instanceof SyntaxError) {
-        toast.error("Invalid JSON file format");
+      
+      if (error instanceof SyntaxError) {
+        toast.error("Invalid JSON file format. Please check your JSON structure.");
       } else if (error.message?.includes('Excel') || error.message?.includes('xlsx')) {
-        toast.error("Invalid Excel file format");
+        toast.error("Invalid Excel file format. Ensure worksheets are named 'Episodes' and 'Notes'.");
+      } else if (error?.response?.data?.message) {
+        toast.error(`Import failed: ${error.response.data.message}`);
+      } else if (error.message?.includes('Network')) {
+        toast.error("Network error during import. Please check your connection and try again.");
+      } else if (error.message?.includes('field') || error.message?.includes('validation')) {
+        toast.error("Data validation failed. Please check your data format and required fields.");
       } else {
-        toast.error("Import failed. Please try again.");
+        toast.error("Import failed. Please verify your file format and data structure.");
       }
     } finally {
       setIsImporting(false);
