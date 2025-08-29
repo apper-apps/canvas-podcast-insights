@@ -102,6 +102,20 @@ class EpisodesService {
     }
   }
 
+// Helper function to validate URL format
+  static isValidUrl(urlString) {
+    if (!urlString || typeof urlString !== 'string' || urlString.trim() === '') {
+      return false;
+    }
+    
+    try {
+      const url = new URL(urlString);
+      return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch (error) {
+      return false;
+    }
+  }
+
 static async create(episodeData) {
     try {
       const client = this.initializeClient();
@@ -111,19 +125,28 @@ static async create(episodeData) {
       
       // Only include Updateable fields for each record
       const params = {
-        records: recordsArray.map(data => ({
-          Name: data.Name || data.title_c || "",
-          Tags: data.Tags || "",
-          title_c: data.title_c || "",
-          channel_name_c: data.channel_name_c || "",
-          company_c: data.company_c || "",
-          date_c: data.date_c || new Date().toISOString().split('T')[0],
-          youtube_url_c: data.youtube_url_c || "",
-          duration_c: data.duration_c || "",
-          description_c: data.description_c || "",
-          transcript_c: data.transcript_c || "",
-          guest_name_c: data.guest_name_c || ""
-        }))
+        records: recordsArray.map(data => {
+          const record = {
+            Name: data.Name || data.title_c || "",
+            Tags: data.Tags || "",
+            title_c: data.title_c || "",
+            channel_name_c: data.channel_name_c || "",
+            company_c: data.company_c || "",
+            date_c: data.date_c || new Date().toISOString().split('T')[0],
+            duration_c: data.duration_c || "",
+            description_c: data.description_c || "",
+            transcript_c: data.transcript_c || "",
+            guest_name_c: data.guest_name_c || ""
+          };
+          
+          // Only include youtube_url_c if it's a valid URL
+          const urlValue = data.youtube_url_c || data.youtube_url || data.url || data.URL || "";
+          if (this.isValidUrl(urlValue)) {
+            record.youtube_url_c = urlValue;
+          }
+          
+          return record;
+        })
       };
 
       const response = await client.createRecord("episode_c", params);
