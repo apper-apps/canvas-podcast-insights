@@ -210,13 +210,20 @@ const record = {
             guest_name_c: data.guest_name_c || data.guest_name || data.guest || data.Guest || "",
             likes_c: parseInt(data.likes_c || data.likes || data.Likes || 0) || 0,
             view_c: parseInt(data.view_c || data.view || data.View || data.views || data.Views || 0) || 0,
-            thumbnail_c: data.thumbnail_c || data.thumbnail || data.Thumbnail || ""
+thumbnail_c: data.thumbnail_c || data.thumbnail || data.Thumbnail || ""
           };
           
-          // Only include youtube_url_c if it's a valid URL
+          // Only include youtube_url_c if it's a valid URL with proper null checks
           const urlValue = data.youtube_url_c || data.youtube_url || data.url || data.URL || "";
-          if (urlValue && typeof urlValue === 'string' && urlValue.trim() !== '' && this.isValidUrl(urlValue)) {
-            record.youtube_url_c = urlValue;
+          if (urlValue && typeof urlValue === 'string' && urlValue.trim() !== '') {
+            try {
+              if (this.isValidUrl(urlValue)) {
+                record.youtube_url_c = urlValue;
+              }
+            } catch (error) {
+              console.error('Error validating URL:', error);
+              // Don't include invalid URLs
+            }
           }
           
           return record;
