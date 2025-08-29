@@ -56,11 +56,15 @@ const EpisodeCard = ({ episode, searchQuery = "", className }) => {
               </div>
             )}
             
-            <div className="flex items-center gap-1">
+<div className="flex items-center gap-1">
               <ApperIcon name="Calendar" className="w-4 h-4" />
-<span>{format(new Date(episode.publishdate_c), "MMM dd, yyyy")}</span>
+              <span>
+                {episode.publishdate_c 
+                  ? format(new Date(episode.publishdate_c), "MMM dd, yyyy")
+                  : "No date"
+                }
+              </span>
             </div>
-            
 {episode.duration_c && (
               <div className="flex items-center gap-1">
                 <ApperIcon name="Clock" className="w-4 h-4" />
