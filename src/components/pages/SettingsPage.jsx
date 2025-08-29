@@ -1,9 +1,9 @@
+import { toast } from "react-toastify";
+import React, { useState } from "react";
+import * as XLSX from 'xlsx';
+import ApperIcon from "@/components/ApperIcon";
 import Card from "@/components/atoms/Card";
 import Button from "@/components/atoms/Button";
-import ApperIcon from "@/components/ApperIcon";
-import { toast } from "react-toastify";
-import { useState } from "react";
-
 const SettingsPage = () => {
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
@@ -124,7 +124,6 @@ let importData;
         importData = JSON.parse(fileContent);
       } else {
         // Handle Excel file
-        const { default: XLSX } = await import('https://cdn.skypack.dev/xlsx');
         const arrayBuffer = await file.arrayBuffer();
         const workbook = XLSX.read(arrayBuffer, { type: 'array' });
         
