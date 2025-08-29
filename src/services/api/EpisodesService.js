@@ -383,7 +383,7 @@ static async create(episodeData) {
       const recordsArray = Array.isArray(episodeData) ? episodeData : [episodeData];
       
       // Only include Updateable fields for each record
-      const params = {
+const params = {
         records: recordsArray.map(data => {
 const record = {
             Name: data.Name || data.title_c || data.title || data.Title || "",
@@ -405,7 +405,7 @@ const record = {
           
           // Only include youtube_url_c if it's a valid URL
           const urlValue = data.youtube_url_c || data.youtube_url || data.url || data.URL || "";
-          if (this.isValidUrl(urlValue)) {
+          if (urlValue && typeof urlValue === 'string' && urlValue.trim() !== '' && this.isValidUrl(urlValue)) {
             record.youtube_url_c = urlValue;
           }
           
@@ -473,7 +473,7 @@ if (failedRecords.length > 0) {
       // Only include Updateable fields plus Id
       const params = {
         records: [{
-          Id: id,
+Id: id,
 Name: updateData.Name,
           Tags: updateData.Tags,
           title_c: updateData.title_c,
@@ -482,7 +482,6 @@ Name: updateData.Name,
           videoid_c: updateData.videoid_c,
           company_c: updateData.company_c,
           publishdate_c: updateData.publishdate_c,
-          youtube_url_c: updateData.youtube_url_c,
           duration_c: updateData.duration_c,
           description_c: updateData.description_c,
           transcript_c: updateData.transcript_c,
