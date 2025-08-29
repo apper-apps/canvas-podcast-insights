@@ -102,25 +102,28 @@ class EpisodesService {
     }
   }
 
-  static async create(episodeData) {
+static async create(episodeData) {
     try {
       const client = this.initializeClient();
       
-      // Only include Updateable fields
+      // Support both single record and array of records for bulk import
+      const recordsArray = Array.isArray(episodeData) ? episodeData : [episodeData];
+      
+      // Only include Updateable fields for each record
       const params = {
-        records: [{
-          Name: episodeData.Name || "",
-          Tags: episodeData.Tags || "",
-          title_c: episodeData.title_c || "",
-          channel_name_c: episodeData.channel_name_c || "",
-          company_c: episodeData.company_c || "",
-          date_c: episodeData.date_c || new Date().toISOString().split('T')[0],
-          youtube_url_c: episodeData.youtube_url_c || "",
-          duration_c: episodeData.duration_c || "",
-          description_c: episodeData.description_c || "",
-          transcript_c: episodeData.transcript_c || "",
-          guest_name_c: episodeData.guest_name_c || ""
-        }]
+        records: recordsArray.map(data => ({
+          Name: data.Name || data.title_c || "",
+          Tags: data.Tags || "",
+          title_c: data.title_c || "",
+          channel_name_c: data.channel_name_c || "",
+          company_c: data.company_c || "",
+          date_c: data.date_c || new Date().toISOString().split('T')[0],
+          youtube_url_c: data.youtube_url_c || "",
+          duration_c: data.duration_c || "",
+          description_c: data.description_c || "",
+          transcript_c: data.transcript_c || "",
+          guest_name_c: data.guest_name_c || ""
+        }))
       };
 
       const response = await client.createRecord("episode_c", params);
@@ -131,28 +134,39 @@ class EpisodesService {
         return null;
       }
 
-      if (response.results) {
+if (response.results) {
         const successfulRecords = response.results.filter(result => result.success);
         const failedRecords = response.results.filter(result => !result.success);
-        
-        if (failedRecords.length > 0) {
+if (failedRecords.length > 0) {
           console.error(`Failed to create episodes ${failedRecords.length} records:${JSON.stringify(failedRecords)}`);
           
-          failedRecords.forEach(record => {
-            record.errors?.forEach(error => {
-              toast.error(`${error.fieldLabel}: ${error}`);
+          // For bulk imports, show summary instead of individual errors
+          if (recordsArray.length > 1) {
+            toast.error(`Failed to import ${failedRecords.length} out of ${recordsArray.length} episodes`);
+          } else {
+            failedRecords.forEach(record => {
+              record.errors?.forEach(error => {
+                toast.error(`${error.fieldLabel}: ${error}`);
+              });
+              if (record.message) toast.error(record.message);
             });
-            if (record.message) toast.error(record.message);
-          });
+          }
         }
         
         if (successfulRecords.length > 0) {
-          toast.success("Episode created successfully");
-          return successfulRecords[0].data;
+          // Show appropriate success message based on single vs bulk import
+          if (recordsArray.length > 1) {
+            toast.success(`Successfully imported ${successfulRecords.length} episodes`);
+          } else {
+            toast.success("Episode created successfully");
+          }
+          
+          // Return single record for single import, array for bulk import
+          return recordsArray.length === 1 ? successfulRecords[0].data : successfulRecords.map(r => r.data);
         }
       }
 
-      return null;
+      return recordsArray.length === 1 ? null : [];
     } catch (error) {
       if (error?.response?.data?.message) {
         console.error("Error creating episode:", error?.response?.data?.message);
