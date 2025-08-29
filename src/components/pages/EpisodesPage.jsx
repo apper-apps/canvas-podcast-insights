@@ -20,9 +20,14 @@ const [filters, setFilters] = useState({});
   const [importData, setImportData] = useState("");
   const [importing, setImporting] = useState(false);
 
-  useEffect(() => {
-    loadEpisodes();
+useEffect(() => {
+    initializeData();
   }, []);
+
+  const initializeData = async () => {
+    await EpisodesService.initializeSampleData();
+    loadEpisodes();
+  };
 
   const loadEpisodes = async () => {
     try {
@@ -140,12 +145,12 @@ if (filters.guest) {
       filtered = filtered.filter(ep => (ep.company_c || '') === filters.company);
     }
 
-    if (filters.startDate) {
-      filtered = filtered.filter(ep => ep.date_c && new Date(ep.date_c) >= new Date(filters.startDate));
+if (filters.startDate) {
+      filtered = filtered.filter(ep => ep.publishdate_c && new Date(ep.publishdate_c) >= new Date(filters.startDate));
     }
 
     if (filters.endDate) {
-      filtered = filtered.filter(ep => ep.date_c && new Date(ep.date_c) <= new Date(filters.endDate));
+      filtered = filtered.filter(ep => ep.publishdate_c && new Date(ep.publishdate_c) <= new Date(filters.endDate));
     }
 
     if (filters.duration) {
@@ -245,19 +250,19 @@ if (filters.guest) {
                   Paste your data in CSV or JSON format. Supported field names:
                 </p>
                 <div className="text-sm text-slate-500 bg-slate-50 p-3 rounded-lg">
-                  <strong>CSV Headers:</strong> title, channel_name, company, date, youtube_url, duration, description, transcript, guest_name<br/>
-                  <strong>JSON Keys:</strong> Same as CSV headers or with _c suffix (title_c, channel_name_c, etc.)
+<strong>CSV Headers:</strong> title, channel_name, channelid, videoid, company, publishdate, youtube_url, duration, description, transcript, guest_name, likes, view, thumbnail<br/>
+                  <strong>JSON Keys:</strong> Same as CSV headers or with _c suffix (title_c, channel_name_c, channelid_c, videoid_c, publishdate_c, likes_c, view_c, thumbnail_c, etc.)
                 </div>
               </div>
               
               <textarea
                 className="w-full h-64 p-3 border border-slate-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                placeholder={`CSV Example:
-title,channel_name,company,date,guest_name
-"Episode Title","20VC","Company Name","2024-01-15","John Doe"
+placeholder={`CSV Example:
+title,channel_name,channelid,videoid,company,publishdate,youtube_url,likes,view,thumbnail,guest_name
+"Episode Title","20VC","UC20VC_MAIN","dQw4w9WgXcQ","Company Name","2024-01-15","https://youtube.com/watch?v=dQw4w9WgXcQ","1200","25000","https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg","John Doe"
 
 JSON Example:
-[{"title": "Episode Title", "channel_name": "20VC", "company": "Company Name", "date": "2024-01-15", "guest_name": "John Doe"}]`}
+[{"title": "Episode Title", "channel_name": "20VC", "channelid": "UC20VC_MAIN", "videoid": "dQw4w9WgXcQ", "company": "Company Name", "publishdate": "2024-01-15", "youtube_url": "https://youtube.com/watch?v=dQw4w9WgXcQ", "likes": 1200, "view": 25000, "thumbnail": "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg", "guest_name": "John Doe"}]`}
                 value={importData}
                 onChange={(e) => setImportData(e.target.value)}
               />

@@ -16,7 +16,7 @@ const EpisodeTable = ({
   searchQuery = ""
 }) => {
   const navigate = useNavigate();
-  const [sortField, setSortField] = useState("date");
+const [sortField, setSortField] = useState("publishdate_c");
   const [sortDirection, setSortDirection] = useState("desc");
 
   if (loading) return <Loading />;
@@ -45,8 +45,9 @@ const EpisodeTable = ({
 
     // Handle date sorting
 // Handle date sorting
-    if (sortField === "date_c") {
+if (sortField === "publishdate_c") {
       aVal = new Date(aVal);
+      bVal = new Date(bVal);
     }
 
     // Handle string sorting
@@ -111,7 +112,7 @@ if (!query || !text) return text;
               <SortHeader field="title">Title</SortHeader>
               <SortHeader field="guestName">Guest</SortHeader>
 <SortHeader field="channel_name_c">Channel</SortHeader>
-              <SortHeader field="date_c">Date</SortHeader>
+              <SortHeader field="publishdate_c">Date</SortHeader>
               <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                 Duration
               </th>
@@ -128,10 +129,10 @@ if (!query || !text) return text;
                 onClick={() => navigate(`/episodes/${episode.Id}`)}
               >
                 <td className="px-6 py-4">
-                  <div className="max-w-md">
+<div className="max-w-md">
                     <div className="text-sm font-medium text-slate-900 line-clamp-2">
-                      {highlightText(episode.title, searchQuery)}
-</div>
+                      {highlightText(episode.title_c, searchQuery)}
+                    </div>
                     <div className="text-sm text-slate-500 line-clamp-2 mt-1">
                       {highlightText(episode.description_c, searchQuery)}
                     </div>
@@ -142,14 +143,19 @@ if (!query || !text) return text;
                     {highlightText(episode.guest_name_c, searchQuery)}
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-<div className="text-sm text-slate-900">
-                    {episode.company_c ? highlightText(episode.company_c, searchQuery) : "-"}
+<td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-slate-900">
+                    {highlightText(episode.channel_name_c, searchQuery)}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-<div className="text-sm text-slate-900">
-                    {format(new Date(episode.date_c), "MMM dd, yyyy")}
+                  <div className="text-sm text-slate-900">
+                    {format(new Date(episode.publishdate_c), "MMM dd, yyyy")}
+                  </div>
+                </td>
+<td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-slate-900">
+                    {episode.duration_c || "-"}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">

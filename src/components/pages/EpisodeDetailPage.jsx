@@ -158,7 +158,7 @@ setNotes(notesData.filter(note => note.episode_id_c?.Id === parseInt(id) || note
 <div className="flex items-center gap-2 text-slate-600">
                 <ApperIcon name="Calendar" className="w-4 h-4" />
                 <span className="font-medium">Published:</span>
-<span>{format(new Date(episode.date_c), "MMM dd, yyyy")}</span>
+<span>{format(new Date(episode.publishdate_c), "MMM dd, yyyy")}</span>
               </div>
             </div>
 
