@@ -109,8 +109,8 @@ if (!query || !text) return text;
         <table className="min-w-full divide-y divide-slate-200">
           <thead className="bg-slate-50">
             <tr>
-              <SortHeader field="title">Title</SortHeader>
-              <SortHeader field="guestName">Guest</SortHeader>
+<SortHeader field="title_c">Title</SortHeader>
+              <SortHeader field="guest_name_c">Guest</SortHeader>
 <SortHeader field="channel_name_c">Channel</SortHeader>
               <SortHeader field="publishdate_c">Date</SortHeader>
               <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
@@ -160,7 +160,7 @@ if (!query || !text) return text;
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
 <div className="text-sm text-slate-900">
-                    {episode.duration_c || "-"}
+                    {episode.view_c ? episode.view_c.toLocaleString() : "-"}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right">

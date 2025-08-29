@@ -227,7 +227,26 @@ const SAMPLE_EPISODES = [
     likes_c: 2891,
     view_c: 54326,
     thumbnail_c: "https://img.youtube.com/vi/eFg123HiJ789/maxresdefault.jpg",
-    Tags: "Quantum Computing,Technology,Innovation"
+Tags: "Quantum Computing,Technology,Innovation"
+  },
+  {
+    Id: 13,
+    Name: "20VC with Harry Stebbings",
+    title_c: "20VC with Harry Stebbings",
+    channel_name_c: "20VC with Harry Stebbings",
+    channelid_c: "UC20VC_HARRY_STEBBINGS",
+    videoid_c: "4lFDEWFzHVk",
+    company_c: "20VC",
+    publishdate_c: "2024-07-24",
+    youtube_url_c: "https://www.youtube.com/watch?v=4lFDEWFzHVk",
+    duration_c: "45",
+    description_c: "This idea that oh wo is me I can't raise a third fund I've never returned any capital toughing luck right almost everything about a big fund is good for...",
+    transcript_c: "This idea that oh wo is me I can't raise a third fund I've never returned any capital toughing luck right almost everything about a big fund is good for...",
+    guest_name_c: "Harry Stebbings",
+    likes_c: 57,
+    view_c: 2149,
+    thumbnail_c: "https://i9.ytimg.com/vi/4lFDEWFzHVk/hqdefault_custom_2.jpg?sqp=CNC9isQG-oaymwEnCNACELwBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLD3oBbUWm1_oksnfz1HSR7sftFHJw",
+    Tags: "Venture Capital,Funding,Startups"
   }
 ];
 class EpisodesService {

@@ -81,16 +81,21 @@ useEffect(() => {
         try {
           // Map common field variations to database field names
           const mappedRecord = {
-            Name: record.Name || record.title || record.Title || '',
+Name: record.Name || record.title || record.Title || '',
             title_c: record.title_c || record.title || record.Title || '',
             channel_name_c: record.channel_name_c || record.channel_name || record.channel || record.Channel || '',
+            channelid_c: record.channelid_c || record.channelid || record.ChannelID || '',
+            videoid_c: record.videoid_c || record.videoid || record.VideoID || '',
             company_c: record.company_c || record.company || record.Company || '',
-            date_c: record.date_c || record.date || record.Date || new Date().toISOString().split('T')[0],
+            publishdate_c: record.publishdate_c || record.publishdate || record.PublishDate || record.date_c || record.date || record.Date || new Date().toISOString().split('T')[0],
             youtube_url_c: record.youtube_url_c || record.youtube_url || record.url || record.URL || '',
             duration_c: record.duration_c || record.duration || record.Duration || '',
             description_c: record.description_c || record.description || record.Description || '',
             transcript_c: record.transcript_c || record.transcript || record.Transcript || '',
-            guest_name_c: record.guest_name_c || record.guest_name || record.guest || record.Guest || ''
+            guest_name_c: record.guest_name_c || record.guest_name || record.guest || record.Guest || '',
+            likes_c: parseInt(record.likes_c || record.likes || record.Likes || 0) || 0,
+            view_c: parseInt(record.view_c || record.view || record.View || record.views || record.Views || 0) || 0,
+            thumbnail_c: record.thumbnail_c || record.thumbnail || record.Thumbnail || ''
           };
 
           await EpisodesService.create(mappedRecord);
@@ -251,7 +256,7 @@ if (filters.startDate) {
                 </p>
                 <div className="text-sm text-slate-500 bg-slate-50 p-3 rounded-lg">
 <strong>CSV Headers:</strong> title, channel_name, channelid, videoid, company, publishdate, youtube_url, duration, description, transcript, guest_name, likes, view, thumbnail<br/>
-                  <strong>JSON Keys:</strong> Same as CSV headers or with _c suffix (title_c, channel_name_c, channelid_c, videoid_c, publishdate_c, likes_c, view_c, thumbnail_c, etc.)
+                  <strong>JSON Keys:</strong> Same as CSV headers or with _c suffix (title_c, channel_name_c, channelid_c, videoid_c, publishdate_c, youtube_url_c, likes_c, view_c, thumbnail_c, etc.)
                 </div>
               </div>
               

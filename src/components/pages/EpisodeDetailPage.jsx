@@ -130,14 +130,14 @@ setNotes(notesData.filter(note => note.episode_id_c?.Id === parseInt(id) || note
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => window.open(episode.youtubeUrl, "_blank")}
+onClick={() => window.open(episode.youtube_url_c, "_blank")}
               >
                 <ApperIcon name="ExternalLink" className="w-4 h-4" />
               </Button>
             </div>
 
             <h1 className="text-3xl font-bold text-slate-900 mb-4 leading-tight">
-              {episode.title}
+{episode.title_c}
             </h1>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
@@ -162,12 +162,12 @@ setNotes(notesData.filter(note => note.episode_id_c?.Id === parseInt(id) || note
               </div>
             </div>
 
-            {episode.duration && (
+{episode.duration_c && (
               <div className="mt-3">
                 <div className="flex items-center gap-2 text-sm text-slate-600">
                   <ApperIcon name="Clock" className="w-4 h-4" />
                   <span className="font-medium">Duration:</span>
-                  <span>{episode.duration}</span>
+                  <span>{episode.duration_c}</span>
                 </div>
               </div>
             )}
