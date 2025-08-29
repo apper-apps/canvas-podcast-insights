@@ -2,7 +2,7 @@
   {
     "Id": 1,
     "title": "20VC: Reid Hoffman on Why Blitzscaling is Right for Some Companies But Wrong for Many, Why He Believes AI Will Augment vs Replace & How ChatGPT Changes Everything",
-    "guestName": "Reid Hoffman",
+"channelName": "Reid Hoffman",
     "company": "Greylock Partners",
     "date": "2023-12-15",
     "youtubeUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
@@ -13,7 +13,7 @@
   {
     "Id": 2,
     "title": "20VC: Sequoia's Roelof Botha on Why the Best Investors are Often Wrong, The Biggest Mistakes He Has Made & Why Market Timing Matters More Than We Think",
-    "guestName": "Roelof Botha",
+"channelName": "Roelof Botha",
     "company": "Sequoia Capital",
     "date": "2023-12-10",
     "youtubeUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
@@ -24,7 +24,7 @@
   {
     "Id": 3,
     "title": "20VC: Kleiner Perkins' Mamoon Hamid on AI's $7TN Market Opportunity, Why Most AI Companies Will Fail & The Future of Work",
-    "guestName": "Mamoon Hamid",
+"channelName": "Mamoon Hamid",
     "company": "Kleiner Perkins",
     "date": "2023-12-05",
     "youtubeUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
@@ -35,7 +35,7 @@
   {
     "Id": 4,
     "title": "20VC: Benchmark's Sarah Tavel on Platform Dynamics, Network Effects and Why Hierarchy of Engagement is Critical for Consumer Success",
-    "guestName": "Sarah Tavel",
+"channelName": "Sarah Tavel",
     "company": "Benchmark",
     "date": "2023-11-28",
     "youtubeUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
@@ -46,7 +46,7 @@
   {
     "Id": 5,
     "title": "20VC: Figma's Dylan Field on Building in Public, The Importance of Design in Enterprise Software & Competing with Adobe",
-    "guestName": "Dylan Field",
+"channelName": "Dylan Field",
     "company": "Figma",
     "date": "2023-11-20",
     "youtubeUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",

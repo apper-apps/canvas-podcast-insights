@@ -72,8 +72,8 @@ class EpisodesService {
     
     const searchTerm = query.toLowerCase();
     return this.episodes.filter(episode => 
-      episode.title.toLowerCase().includes(searchTerm) ||
-      episode.guestName.toLowerCase().includes(searchTerm) ||
+episode.title.toLowerCase().includes(searchTerm) ||
+      episode.channelName.toLowerCase().includes(searchTerm) ||
       (episode.company && episode.company.toLowerCase().includes(searchTerm)) ||
       episode.transcript.toLowerCase().includes(searchTerm) ||
       episode.description.toLowerCase().includes(searchTerm)

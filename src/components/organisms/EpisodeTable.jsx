@@ -110,7 +110,7 @@ if (!query || !text) return text;
             <tr>
               <SortHeader field="title">Title</SortHeader>
               <SortHeader field="guestName">Guest</SortHeader>
-              <SortHeader field="company">Company</SortHeader>
+<SortHeader field="channelName">Channel</SortHeader>
               <SortHeader field="date">Date</SortHeader>
               <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                 Duration
@@ -119,7 +119,7 @@ if (!query || !text) return text;
                 Actions
               </th>
             </tr>
-          </thead>
+</thead>
           <tbody className="bg-white divide-y divide-slate-200">
             {sortedEpisodes.map((episode) => (
               <tr 

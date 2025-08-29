@@ -141,10 +141,10 @@ const EpisodeDetailPage = () => {
             </h1>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-              <div className="flex items-center gap-2 text-slate-600">
+<div className="flex items-center gap-2 text-slate-600">
                 <ApperIcon name="User" className="w-4 h-4" />
-                <span className="font-medium">Guest:</span>
-                <span>{episode.guestName}</span>
+                <span className="font-medium">Channel:</span>
+                <span>{episode.channelName}</span>
               </div>
 
               {episode.company && (
@@ -155,9 +155,9 @@ const EpisodeDetailPage = () => {
                 </div>
               )}
 
-              <div className="flex items-center gap-2 text-slate-600">
+<div className="flex items-center gap-2 text-slate-600">
                 <ApperIcon name="Calendar" className="w-4 h-4" />
-                <span className="font-medium">Date:</span>
+                <span className="font-medium">Published:</span>
                 <span>{format(new Date(episode.date), "MMM dd, yyyy")}</span>
               </div>
             </div>

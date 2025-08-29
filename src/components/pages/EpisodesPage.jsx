@@ -42,7 +42,7 @@ const EpisodesPage = () => {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(episode => 
         episode.title.toLowerCase().includes(query) ||
-        episode.guestName.toLowerCase().includes(query) ||
+episode.channelName.toLowerCase().includes(query) ||
         (episode.company && episode.company.toLowerCase().includes(query)) ||
         episode.transcript.toLowerCase().includes(query) ||
         episode.description.toLowerCase().includes(query)

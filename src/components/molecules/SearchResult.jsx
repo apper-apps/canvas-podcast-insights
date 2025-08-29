@@ -39,11 +39,10 @@ const highlightText = (text, query) => {
           </h3>
           
           <div className="flex flex-wrap items-center gap-2 text-sm text-slate-600 mb-3">
-            <div className="flex items-center gap-1">
+<div className="flex items-center gap-1">
               <ApperIcon name="User" className="w-4 h-4" />
-              <span>{highlightText(episode.guestName, searchQuery)}</span>
+              <span>{highlightText(episode.channelName, searchQuery)}</span>
             </div>
-            
             {episode.company && (
               <div className="flex items-center gap-1">
                 <ApperIcon name="Building" className="w-4 h-4" />
