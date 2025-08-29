@@ -124,14 +124,21 @@ fieldName: "publishdate_c",
         { field: { Name: "thumbnail_c" } }
       ];
 
-      const response = await client.fetchRecords("episode_c", params);
+const response = await client.fetchRecords("episode_c", params);
       if (!response.success) {
         console.error(response.message);
         toast.error(response.message);
         return [];
       }
 
-      return response.data || [];
+      // Filter out records with missing essential fields to prevent blank displays
+      const validRecords = (response.data || []).filter(record => 
+        record.title_c && record.title_c.trim() !== "" &&
+        record.guest_name_c && record.guest_name_c.trim() !== "" &&
+        record.channel_name_c && record.channel_name_c.trim() !== ""
+      );
+
+      return validRecords;
     } catch (error) {
       if (error?.response?.data?.message) {
         console.error("Error fetching episodes:", error?.response?.data?.message);

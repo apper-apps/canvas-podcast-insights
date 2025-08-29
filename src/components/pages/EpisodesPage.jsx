@@ -138,12 +138,13 @@ Name: record.Name || record.title || record.Title || '',
 // Apply search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      filtered = episodes.filter(episode =>
+filtered = episodes.filter(episode =>
         (episode.title_c || '').toLowerCase().includes(query) ||
         (episode.channel_name_c || '').toLowerCase().includes(query) ||
-        (episode.company_c && episode.company_c.toLowerCase().includes(query)) ||
+        (episode.company_c || '').toLowerCase().includes(query) ||
         (episode.transcript_c || '').toLowerCase().includes(query) ||
-        (episode.description_c || '').toLowerCase().includes(query)
+        (episode.description_c || '').toLowerCase().includes(query) ||
+        (episode.guest_name_c || '').toLowerCase().includes(query)
       );
     }
 

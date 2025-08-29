@@ -131,37 +131,40 @@ if (!query || !text) return text;
               >
                 <td className="px-6 py-4">
                   <div className="max-w-md">
-                    <div className="text-sm font-medium text-slate-900 line-clamp-2">
-                      {highlightText(episode.title_c, searchQuery)}
+<div className="text-sm font-medium text-slate-900 line-clamp-2">
+                      {highlightText(episode.title_c || "Untitled Episode", searchQuery)}
                     </div>
                     <div className="text-sm text-slate-500 line-clamp-2 mt-1">
-                      {highlightText(episode.description_c, searchQuery)}
+                      {highlightText(episode.description_c || "No description", searchQuery)}
                     </div>
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-slate-900">
-                    {highlightText(episode.guest_name_c, searchQuery)}
+                    {highlightText(episode.guest_name_c || "Unknown Guest", searchQuery)}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-slate-900">
-                    {highlightText(episode.channel_name_c, searchQuery)}
+                    {highlightText(episode.channel_name_c || "Unknown Channel", searchQuery)}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-slate-900">
-                    {format(new Date(episode.publishdate_c), "MMM dd, yyyy")}
+                    {episode.publishdate_c && episode.publishdate_c.trim() !== ""
+                      ? format(new Date(episode.publishdate_c), "MMM dd, yyyy")
+                      : "No date"
+                    }
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-slate-900">
-                    {episode.duration_c || "-"}
+                    {episode.duration_c && episode.duration_c.trim() !== "" ? episode.duration_c : "-"}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-slate-900">
-                    {episode.view_c ? episode.view_c.toLocaleString() : "-"}
+                    {episode.view_c && episode.view_c > 0 ? episode.view_c.toLocaleString() : "-"}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right">
