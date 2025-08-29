@@ -103,20 +103,56 @@ const SettingsPage = () => {
     const file = event.target.files[0];
     if (!file) return;
 
-    if (file.type !== 'application/json') {
-      toast.error("Please select a valid JSON file");
+// Check if file is JSON or Excel
+    const isJson = file.type === 'application/json';
+    const isExcel = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || 
+                    file.type === 'application/vnd.ms-excel' || 
+                    file.name.endsWith('.xlsx');
+    
+    if (!isJson && !isExcel) {
+      toast.error("Please select a valid JSON or Excel (.xlsx) file");
       return;
     }
 
     try {
       setIsImporting(true);
       
-      const fileContent = await file.text();
-      const importData = JSON.parse(fileContent);
+let importData;
+      
+      if (isJson) {
+        const fileContent = await file.text();
+        importData = JSON.parse(fileContent);
+      } else {
+        // Handle Excel file
+        const { default: XLSX } = await import('https://cdn.skypack.dev/xlsx');
+        const arrayBuffer = await file.arrayBuffer();
+        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+        
+        // Check for required worksheets
+        if (!workbook.SheetNames.includes('Episodes') || !workbook.SheetNames.includes('Notes')) {
+          toast.error("Excel file must contain 'Episodes' and 'Notes' worksheets");
+          return;
+        }
+        
+        // Parse Episodes worksheet
+        const episodesSheet = workbook.Sheets['Episodes'];
+        const episodes = XLSX.utils.sheet_to_json(episodesSheet);
+        
+        // Parse Notes worksheet  
+        const notesSheet = workbook.Sheets['Notes'];
+        const notes = XLSX.utils.sheet_to_json(notesSheet);
+        
+        importData = {
+          version: "1.0.0",
+          exportedAt: new Date().toISOString(),
+          episodes: episodes,
+          notes: notes
+        };
+      }
 
-      // Validate file structure
+// Validate file structure
       if (!importData.episodes || !importData.notes || !Array.isArray(importData.episodes) || !Array.isArray(importData.notes)) {
-        toast.error("Invalid backup file format");
+        toast.error("Invalid file format - missing episodes or notes data");
         return;
       }
 
@@ -179,8 +215,10 @@ const SettingsPage = () => {
       
     } catch (error) {
       console.error("Import failed:", error);
-      if (error instanceof SyntaxError) {
+if (error instanceof SyntaxError) {
         toast.error("Invalid JSON file format");
+      } else if (error.message?.includes('Excel') || error.message?.includes('xlsx')) {
+        toast.error("Invalid Excel file format");
       } else {
         toast.error("Import failed. Please try again.");
       }
@@ -239,7 +277,7 @@ const SettingsPage = () => {
               <input
                 id="import-file-input"
                 type="file"
-                accept=".json"
+accept=".json,.xlsx"
                 onChange={handleFileUpload}
                 style={{ display: 'none' }}
               />
