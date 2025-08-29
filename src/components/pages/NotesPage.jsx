@@ -53,11 +53,11 @@ const NotesPage = () => {
     }
 
     try {
-      await NotesService.delete(noteId);
-      setNotes(prev => prev.filter(note => note.Id !== noteId));
-      toast.success("Note deleted successfully");
+      const success = await NotesService.delete(noteId);
+      if (success) {
+        setNotes(prev => prev.filter(note => note.Id !== noteId));
+      }
     } catch (error) {
-      toast.error("Failed to delete note");
       console.error("Error deleting note:", error);
     }
   };
@@ -77,12 +77,14 @@ const NotesPage = () => {
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = notes.filter(note => {
-        const episode = episodeMap[note.episodeId];
+        // Handle lookup field - episode_id_c might be an object or number
+        const episodeId = note.episode_id_c?.Id || note.episode_id_c;
+        const episode = episodeMap[episodeId];
         return (
-          note.content.toLowerCase().includes(query) ||
-          (episode && episode.title.toLowerCase().includes(query)) ||
-          (episode && episode.guestName.toLowerCase().includes(query)) ||
-          (episode && episode.company && episode.company.toLowerCase().includes(query))
+          note.content_c?.toLowerCase().includes(query) ||
+          (episode && episode.title_c?.toLowerCase().includes(query)) ||
+          (episode && episode.guest_name_c?.toLowerCase().includes(query)) ||
+          (episode && episode.company_c?.toLowerCase().includes(query))
         );
       });
     }
@@ -91,15 +93,17 @@ const NotesPage = () => {
     return filtered.sort((a, b) => {
       switch (sortBy) {
         case "recent":
-          return new Date(b.createdAt) - new Date(a.createdAt);
+          return new Date(b.created_at_c) - new Date(a.created_at_c);
         case "oldest":
-          return new Date(a.createdAt) - new Date(b.createdAt);
+          return new Date(a.created_at_c) - new Date(b.created_at_c);
         case "updated":
-          return new Date(b.updatedAt) - new Date(a.updatedAt);
+          return new Date(b.updated_at_c) - new Date(a.updated_at_c);
         case "episode":
-          const episodeA = episodeMap[a.episodeId];
-          const episodeB = episodeMap[b.episodeId];
-          return episodeA?.title.localeCompare(episodeB?.title) || 0;
+          const episodeIdA = a.episode_id_c?.Id || a.episode_id_c;
+          const episodeIdB = b.episode_id_c?.Id || b.episode_id_c;
+          const episodeA = episodeMap[episodeIdA];
+          const episodeB = episodeMap[episodeIdB];
+          return episodeA?.title_c?.localeCompare(episodeB?.title_c) || 0;
         default:
           return 0;
       }
@@ -179,7 +183,7 @@ const NotesPage = () => {
           </div>
           <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-4">
             <div className="text-2xl font-bold text-purple-900">
-              {new Set(notes.map(note => note.episodeId)).size}
+              {new Set(notes.map(note => note.episode_id_c?.Id || note.episode_id_c)).size}
             </div>
             <div className="text-purple-700 text-sm">Episodes with Notes</div>
           </div>
@@ -205,16 +209,19 @@ const NotesPage = () => {
         />
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredAndSortedNotes.map((note) => (
-            <NoteCard
-              key={note.Id}
-              note={note}
-              episode={episodeMap[note.episodeId]}
-              onEdit={handleNoteEdit}
-              onDelete={handleNoteDelete}
-              searchQuery={searchQuery}
-            />
-          ))}
+          {filteredAndSortedNotes.map((note) => {
+            const episodeId = note.episode_id_c?.Id || note.episode_id_c;
+            return (
+              <NoteCard
+                key={note.Id}
+                note={note}
+                episode={episodeMap[episodeId]}
+                onEdit={handleNoteEdit}
+                onDelete={handleNoteDelete}
+                searchQuery={searchQuery}
+              />
+            );
+          })}
         </div>
       )}
     </div>

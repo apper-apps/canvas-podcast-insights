@@ -39,7 +39,7 @@ const EpisodeDetailPage = () => {
       ]);
       
       setEpisode(episodeData);
-      setNotes(notesData.filter(note => note.episodeId === parseInt(id)));
+setNotes(notesData.filter(note => note.episode_id_c?.Id === parseInt(id) || note.episode_id_c === parseInt(id)));
     } catch (err) {
       setError("Failed to load episode. Please try again.");
       console.error("Error loading episode:", err);
@@ -144,21 +144,21 @@ const EpisodeDetailPage = () => {
 <div className="flex items-center gap-2 text-slate-600">
                 <ApperIcon name="User" className="w-4 h-4" />
                 <span className="font-medium">Channel:</span>
-                <span>{episode.channelName}</span>
+<span>{episode.channel_name_c}</span>
               </div>
 
-              {episode.company && (
+{episode.company_c && (
                 <div className="flex items-center gap-2 text-slate-600">
                   <ApperIcon name="Building" className="w-4 h-4" />
                   <span className="font-medium">Company:</span>
-                  <span>{episode.company}</span>
+                  <span>{episode.company_c}</span>
                 </div>
               )}
 
 <div className="flex items-center gap-2 text-slate-600">
                 <ApperIcon name="Calendar" className="w-4 h-4" />
                 <span className="font-medium">Published:</span>
-                <span>{format(new Date(episode.date), "MMM dd, yyyy")}</span>
+<span>{format(new Date(episode.date_c), "MMM dd, yyyy")}</span>
               </div>
             </div>
 
@@ -174,7 +174,7 @@ const EpisodeDetailPage = () => {
           </Card>
 
           {/* YouTube Player */}
-          <YoutubePlayer url={episode.youtubeUrl} title={episode.title} />
+<YoutubePlayer url={episode.youtube_url_c} title={episode.title_c} />
 
           {/* Transcript Search */}
           <Card className="p-6">
@@ -202,7 +202,7 @@ const EpisodeDetailPage = () => {
 
             <div className="prose prose-slate max-w-none">
               <div className="text-slate-700 leading-relaxed whitespace-pre-wrap text-sm">
-                {highlightText(episode.transcript, searchQuery)}
+{highlightText(episode.transcript_c, searchQuery)}
               </div>
             </div>
           </Card>
@@ -275,9 +275,9 @@ const EpisodeDetailPage = () => {
               </div>
 
               <div>
-                <span className="font-medium text-slate-700">Transcript Length:</span>
-                <span className="ml-2 text-slate-600">
-                  {episode.transcript.length.toLocaleString()} characters
+<span className="font-medium text-slate-700">Transcript Length:</span>
+                <span className="text-slate-600">
+                  {episode.transcript_c ? `${episode.transcript_c.length.toLocaleString()} characters` : "No transcript"}
                 </span>
               </div>
 
@@ -292,7 +292,7 @@ const EpisodeDetailPage = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => window.open(episode.youtubeUrl, "_blank")}
+onClick={() => window.open(episode.youtube_url_c, "_blank")}
                   className="w-full"
                 >
                   <ApperIcon name="Youtube" className="w-4 h-4 mr-2" />

@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import ApperIcon from "@/components/ApperIcon";
 import SearchBar from "@/components/molecules/SearchBar";
 import Button from "@/components/atoms/Button";
-import ApperIcon from "@/components/ApperIcon";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -69,6 +69,24 @@ const Header = () => {
               </Button>
             ))}
           </nav>
+{/* Logout Button */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={async () => {
+              try {
+                const { ApperUI } = window.ApperSDK;
+                await ApperUI.logout();
+                window.location.href = '/login';
+              } catch (error) {
+                console.error("Logout failed:", error);
+              }
+            }}
+            className="hidden md:flex items-center gap-2"
+          >
+            <ApperIcon name="LogOut" className="w-4 h-4" />
+            Logout
+          </Button>
 
           {/* Mobile Menu Button */}
           <Button
@@ -87,7 +105,7 @@ const Header = () => {
             {/* Mobile Search */}
             <SearchBar onSearch={handleSearch} showButton={false} />
             
-            {/* Mobile Navigation */}
+{/* Mobile Navigation */}
             <nav className="flex flex-col gap-2">
               {navigationItems.map((item) => (
                 <Button
@@ -104,6 +122,25 @@ const Header = () => {
                   {item.label}
                 </Button>
               ))}
+              
+              {/* Mobile Logout */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={async () => {
+                  try {
+                    const { ApperUI } = window.ApperSDK;
+                    await ApperUI.logout();
+                    window.location.href = '/login';
+                  } catch (error) {
+                    console.error("Logout failed:", error);
+                  }
+                }}
+                className="justify-start"
+              >
+                <ApperIcon name="LogOut" className="w-4 h-4 mr-2" />
+                Logout
+              </Button>
             </nav>
           </div>
         )}

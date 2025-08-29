@@ -7,11 +7,11 @@ import NotesService from "@/services/api/NotesService";
 import { format } from "date-fns";
 
 const NotesEditor = ({ episodeId, existingNote = null, onSave, onCancel }) => {
-  const [content, setContent] = useState(existingNote?.content || "");
+const [content, setContent] = useState(existingNote?.content_c || "");
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    setContent(existingNote?.content || "");
+setContent(existingNote?.content_c || "");
   }, [existingNote]);
 
   const handleSave = async () => {
@@ -24,17 +24,17 @@ const NotesEditor = ({ episodeId, existingNote = null, onSave, onCancel }) => {
     try {
       let savedNote;
       if (existingNote) {
-        savedNote = await NotesService.update(existingNote.Id, {
-          content: content.trim(),
-          updatedAt: new Date().toISOString()
+savedNote = await NotesService.update(existingNote.Id, {
+          content_c: content.trim(),
+          updated_at_c: new Date().toISOString()
         });
         toast.success("Note updated successfully");
       } else {
-        savedNote = await NotesService.create({
-          episodeId,
-          content: content.trim(),
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+savedNote = await NotesService.create({
+          episode_id_c: episodeId,
+          content_c: content.trim(),
+          created_at_c: new Date().toISOString(),
+          updated_at_c: new Date().toISOString()
         });
         toast.success("Note saved successfully");
       }
@@ -63,8 +63,8 @@ const NotesEditor = ({ episodeId, existingNote = null, onSave, onCancel }) => {
         </h3>
         
         {existingNote && (
-          <div className="text-sm text-slate-500">
-            Created {format(new Date(existingNote.createdAt), "MMM dd, yyyy 'at' h:mm a")}
+<div className="text-sm text-slate-500">
+            Created {format(new Date(existingNote.created_at_c), "MMM dd, yyyy 'at' h:mm a")}
           </div>
         )}
       </div>

@@ -51,40 +51,40 @@ const SearchPage = () => {
     const query = searchQuery.toLowerCase();
     const results = [];
 
-    episodes.forEach(episode => {
+episodes.forEach(episode => {
       const matches = [];
       let relevanceScore = 0;
 
-      // Search in title (higher weight)
-      if (episode.title.toLowerCase().includes(query)) {
+// Search in title (higher weight)
+      if (episode.title_c && episode.title_c.toLowerCase().includes(query)) {
         relevanceScore += 10;
-const sentences = episode.title.match(/[^.!?]+[.!?]+/g) || [episode.title];
+        const sentences = episode.title_c.match(/[^.!?]+[.!?]+/g) || [episode.title_c];
         matches.push(...sentences.filter(s => s.toLowerCase().includes(query)));
       }
 
-      // Search in guest name (high weight)
-      if (episode.guestName.toLowerCase().includes(query)) {
+// Search in guest name (high weight)
+      if (episode.guest_name_c && episode.guest_name_c.toLowerCase().includes(query)) {
         relevanceScore += 8;
-        matches.push(`Guest: ${episode.guestName}`);
+        matches.push(`Guest: ${episode.guest_name_c}`);
       }
 
-      // Search in company (high weight)
-      if (episode.company && episode.company.toLowerCase().includes(query)) {
+// Search in company (high weight)
+      if (episode.company_c && episode.company_c.toLowerCase().includes(query)) {
         relevanceScore += 8;
-        matches.push(`Company: ${episode.company}`);
+        matches.push(`Company: ${episode.company_c}`);
       }
 
-      // Search in description (medium weight)
-      if (episode.description.toLowerCase().includes(query)) {
+// Search in description (medium weight)
+      if (episode.description_c && episode.description_c.toLowerCase().includes(query)) {
         relevanceScore += 5;
-const sentences = episode.description.match(/[^.!?]+[.!?]+/g) || [episode.description];
+        const sentences = episode.description_c.match(/[^.!?]+[.!?]+/g) || [episode.description_c];
         matches.push(...sentences.filter(s => s.toLowerCase().includes(query)).slice(0, 2));
       }
 
-      // Search in transcript (lower weight but more matches)
-      if (episode.transcript.toLowerCase().includes(query)) {
+// Search in transcript (lower weight but more matches)
+      if (episode.transcript_c && episode.transcript_c.toLowerCase().includes(query)) {
         relevanceScore += 2;
-const sentences = episode.transcript.match(/[^.!?]+[.!?]+/g) || [];
+        const sentences = episode.transcript_c.match(/[^.!?]+[.!?]+/g) || [];
         const transcriptMatches = sentences
           .filter(s => s.toLowerCase().includes(query))
           .slice(0, 5)
@@ -105,10 +105,10 @@ const sentences = episode.transcript.match(/[^.!?]+[.!?]+/g) || [];
     return results.sort((a, b) => {
       if (sortBy === "relevance") {
         return b.relevanceScore - a.relevanceScore;
-      } else if (sortBy === "date") {
-        return new Date(b.episode.date) - new Date(a.episode.date);
-      } else if (sortBy === "title") {
-        return a.episode.title.localeCompare(b.episode.title);
+} else if (sortBy === "date") {
+        return new Date(b.episode.date_c) - new Date(a.episode.date_c);
+} else if (sortBy === "title") {
+        return a.episode.title_c.localeCompare(b.episode.title_c);
       }
       return 0;
     });

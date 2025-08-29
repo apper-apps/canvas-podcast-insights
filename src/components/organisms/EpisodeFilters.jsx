@@ -15,12 +15,12 @@ const EpisodeFilters = ({ episodes = [], onFiltersChange, className }) => {
   });
 
   // Generate filter options from episodes
-  const guestOptions = [...new Set(episodes.map(ep => ep.guestName))]
+const guestOptions = [...new Set(episodes.map(ep => ep.guest_name_c))]
     .filter(Boolean)
     .sort()
     .map(guest => ({ value: guest, label: guest }));
 
-  const companyOptions = [...new Set(episodes.map(ep => ep.company))]
+  const companyOptions = [...new Set(episodes.map(ep => ep.company_c))]
     .filter(Boolean)
     .sort()
     .map(company => ({ value: company, label: company }));

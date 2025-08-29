@@ -26,10 +26,10 @@ const NoteCard = ({ note, episode, onEdit, onDelete, searchQuery = "" }) => {
       <div className="flex justify-between items-start mb-3">
         <div className="flex-1">
           <h4 className="font-medium text-slate-900 text-sm mb-1">
-            {highlightText(episode?.title || "Unknown Episode", searchQuery)}
+{highlightText(episode?.title_c || "Unknown Episode", searchQuery)}
           </h4>
-          <p className="text-xs text-slate-500">
-            {format(new Date(note.createdAt), "MMM dd, yyyy 'at' h:mm a")}
+<p className="text-xs text-slate-500">
+            {format(new Date(note.created_at_c), "MMM dd, yyyy 'at' h:mm a")}
           </p>
         </div>
         
@@ -54,7 +54,7 @@ const NoteCard = ({ note, episode, onEdit, onDelete, searchQuery = "" }) => {
       </div>
 
       <div className="text-sm text-slate-700 leading-relaxed">
-        {highlightText(note.content, searchQuery)}
+{highlightText(note.content_c, searchQuery)}
       </div>
     </Card>
   );

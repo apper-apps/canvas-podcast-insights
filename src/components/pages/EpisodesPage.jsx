@@ -40,30 +40,30 @@ const EpisodesPage = () => {
     // Apply search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(episode => 
-        episode.title.toLowerCase().includes(query) ||
-episode.channelName.toLowerCase().includes(query) ||
-        (episode.company && episode.company.toLowerCase().includes(query)) ||
-        episode.transcript.toLowerCase().includes(query) ||
-        episode.description.toLowerCase().includes(query)
+const filtered = episodes.filter(episode =>
+        episode.title_c.toLowerCase().includes(query) ||
+        episode.channel_name_c.toLowerCase().includes(query) ||
+        (episode.company_c && episode.company_c.toLowerCase().includes(query)) ||
+        episode.transcript_c.toLowerCase().includes(query) ||
+        episode.description_c.toLowerCase().includes(query)
       );
     }
 
     // Apply filters
     if (filters.guest) {
-      filtered = filtered.filter(ep => ep.guestName === filters.guest);
+filtered = filtered.filter(ep => ep.guest_name_c === filters.guest);
     }
 
     if (filters.company) {
-      filtered = filtered.filter(ep => ep.company === filters.company);
+filtered = filtered.filter(ep => ep.company_c === filters.company);
     }
 
     if (filters.startDate) {
-      filtered = filtered.filter(ep => new Date(ep.date) >= new Date(filters.startDate));
+filtered = filtered.filter(ep => new Date(ep.date_c) >= new Date(filters.startDate));
     }
 
     if (filters.endDate) {
-      filtered = filtered.filter(ep => new Date(ep.date) <= new Date(filters.endDate));
+filtered = filtered.filter(ep => new Date(ep.date_c) <= new Date(filters.endDate));
     }
 
     if (filters.duration) {
@@ -155,7 +155,7 @@ episode.channelName.toLowerCase().includes(query) ||
         </div>
         <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-4">
           <div className="text-2xl font-bold text-purple-900">
-            {new Set(episodes.map(ep => ep.guestName)).size}
+{new Set(episodes.map(ep => ep.guest_name_c)).size}
           </div>
           <div className="text-purple-700 text-sm">Unique Guests</div>
         </div>

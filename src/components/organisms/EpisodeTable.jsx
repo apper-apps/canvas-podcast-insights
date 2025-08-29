@@ -44,9 +44,9 @@ const EpisodeTable = ({
     let bVal = b[sortField];
 
     // Handle date sorting
-    if (sortField === "date") {
+// Handle date sorting
+    if (sortField === "date_c") {
       aVal = new Date(aVal);
-      bVal = new Date(bVal);
     }
 
     // Handle string sorting
@@ -110,8 +110,8 @@ if (!query || !text) return text;
             <tr>
               <SortHeader field="title">Title</SortHeader>
               <SortHeader field="guestName">Guest</SortHeader>
-<SortHeader field="channelName">Channel</SortHeader>
-              <SortHeader field="date">Date</SortHeader>
+<SortHeader field="channel_name_c">Channel</SortHeader>
+              <SortHeader field="date_c">Date</SortHeader>
               <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                 Duration
               </th>
@@ -131,30 +131,30 @@ if (!query || !text) return text;
                   <div className="max-w-md">
                     <div className="text-sm font-medium text-slate-900 line-clamp-2">
                       {highlightText(episode.title, searchQuery)}
-                    </div>
+</div>
                     <div className="text-sm text-slate-500 line-clamp-2 mt-1">
-                      {highlightText(episode.description, searchQuery)}
+                      {highlightText(episode.description_c, searchQuery)}
                     </div>
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-slate-900">
-                    {highlightText(episode.guestName, searchQuery)}
+<div className="text-sm text-slate-900">
+                    {highlightText(episode.guest_name_c, searchQuery)}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-slate-900">
-                    {episode.company ? highlightText(episode.company, searchQuery) : "-"}
+<div className="text-sm text-slate-900">
+                    {episode.company_c ? highlightText(episode.company_c, searchQuery) : "-"}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-slate-900">
-                    {format(new Date(episode.date), "MMM dd, yyyy")}
+<div className="text-sm text-slate-900">
+                    {format(new Date(episode.date_c), "MMM dd, yyyy")}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-slate-900">
-                    {episode.duration || "-"}
+<div className="text-sm text-slate-900">
+                    {episode.duration_c || "-"}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right">

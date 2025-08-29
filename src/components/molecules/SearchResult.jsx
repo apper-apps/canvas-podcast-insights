@@ -35,24 +35,24 @@ const highlightText = (text, query) => {
       <div className="flex justify-between items-start mb-4">
         <div className="flex-1">
           <h3 className="text-lg font-semibold text-slate-900 mb-2">
-            {highlightText(episode.title, searchQuery)}
+{highlightText(episode.title_c, searchQuery)}
           </h3>
           
           <div className="flex flex-wrap items-center gap-2 text-sm text-slate-600 mb-3">
 <div className="flex items-center gap-1">
               <ApperIcon name="User" className="w-4 h-4" />
-              <span>{highlightText(episode.channelName, searchQuery)}</span>
+<span>{highlightText(episode.channel_name_c, searchQuery)}</span>
             </div>
-            {episode.company && (
+{episode.company_c && (
               <div className="flex items-center gap-1">
                 <ApperIcon name="Building" className="w-4 h-4" />
-                <span>{highlightText(episode.company, searchQuery)}</span>
+                <span>{highlightText(episode.company_c, searchQuery)}</span>
               </div>
             )}
             
             <div className="flex items-center gap-1">
               <ApperIcon name="Calendar" className="w-4 h-4" />
-              <span>{format(new Date(episode.date), "MMM dd, yyyy")}</span>
+<span>{format(new Date(episode.date_c), "MMM dd, yyyy")}</span>
             </div>
           </div>
         </div>
