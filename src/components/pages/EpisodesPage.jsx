@@ -132,22 +132,23 @@ const [filters, setFilters] = useState({});
 
     // Apply filters
 // Apply filters
-    if (filters.guest) {
+if (filters.guest) {
       filtered = filtered.filter(ep => (ep.guest_name_c || '') === filters.guest);
+    }
 
-if (filters.company) {
+    if (filters.company) {
       filtered = filtered.filter(ep => (ep.company_c || '') === filters.company);
     }
 
-if (filters.startDate) {
+    if (filters.startDate) {
       filtered = filtered.filter(ep => ep.date_c && new Date(ep.date_c) >= new Date(filters.startDate));
     }
 
-if (filters.endDate) {
+    if (filters.endDate) {
       filtered = filtered.filter(ep => ep.date_c && new Date(ep.date_c) <= new Date(filters.endDate));
     }
 
-if (filters.duration) {
+    if (filters.duration) {
       filtered = filtered.filter(ep => {
         if (!ep.duration_c) return false;
         const minutes = parseInt(ep.duration_c);
